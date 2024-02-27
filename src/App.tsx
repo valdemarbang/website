@@ -5,7 +5,7 @@ import './App.css'
 function App() {
   const [count, setCount] = useState(0)
 
-  return <Button variant="contained">Hello world</Button>;
+  return <Button variant="contained" onClick={() => setCount(count + 1)}>Counter: {count}</Button>;
 }
 
 export default App
