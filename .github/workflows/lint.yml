@@ -1,5 +1,5 @@
 # Simple workflow for linting the codebase.
-name: Deploy to GitHub Pages
+name: Static Analysis
 on: [push, pull_request]
 
 # Only allow reading the source code.

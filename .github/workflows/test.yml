@@ -1,5 +1,5 @@
 # Simple workflow for testing the codebase.
-name: Deploy to GitHub Pages
+name: Test
 on: [push, pull_request]
 
 # Only allow reading the source code.
