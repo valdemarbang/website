@@ -1,5 +1,5 @@
 # Simple workflow for testing the codebase.
-name: Test
+name: Tests
 on: [push, pull_request]
 
 # Only allow reading the source code.
