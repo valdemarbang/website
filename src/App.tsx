@@ -1,15 +1,14 @@
-import { useState } from 'react'
-import Button from '@mui/material/Button';
-import logo from './assets/blhub-logo.svg';
-import './App.css'
+import TopBar from "./components/TopBar.tsx";
+import "./App.css";
+import Map from "./components/Map.tsx";
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return <>
-    <img src={logo} />
-    <Button variant="contained" onClick={() => setCount(count + 1)}>Counter: {count}</Button>
-  </>;
+  return (
+    <>
+      <TopBar />
+      <Map />
+    </>
+  );
 }
 
-export default App
+export default App;
