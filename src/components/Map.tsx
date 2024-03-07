@@ -8,19 +8,21 @@ export default function MyMap() {
   const height = useRef(window.innerHeight);
   const width = useRef(window.innerWidth);
 
+  const linkoping: [number, number] = [58.4, 15.625278];
+
   return (
     <Map height={height.current} width={width.current}
 
-    defaultCenter={[50.879, 4.6997]} defaultZoom={11}>
+    defaultCenter={linkoping} defaultZoom={11}>
       <Marker 
         width={50}
-        anchor={[50.879, 4.6997]} 
+        anchor={[58.5, 15.65]}
         color={color} 
         onClick={() => setHue(hue + 20)} 
       />
       <Marker 
         width={50}
-        anchor={[50.879, 4.6997]} 
+        anchor={[58.45, 15.6]}
         color={color} 
         onClick={() => setHue(hue + 20)} 
       >
