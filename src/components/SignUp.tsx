@@ -19,7 +19,7 @@ function SignUp() {
     const email = data.get("email");
     const password = data.get("password");
 
-    const response = await fetch("http://localhost:/signup", {
+    const response = await fetch("http://localhost:8080/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
