@@ -8,17 +8,28 @@ import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
+import SuccessAlert from './SuccessAlert';
 
 function SignUp() {
-  const [Message, setMessage] = useState<string | null>(null);
+  // States
+  const [successMsg, setMessage] = useState<string | null>(null);
+  const [firstNameError, setFirstNameError] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [openAlert, setOpenAlert] = useState(false);
+
+  // Handle submit button press
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const firstname = data.get("firstName");
-    const lastname = data.get("lastName");
-    const email = data.get("email");
-    const password = data.get("password");
+    // Get form data, if not available set to empty string
+    const firstname = data.get("firstName") || "";
+    const lastname = data.get("lastName") || "";
+    const email = data.get("email") || "";
+    const password = data.get("password") || "";
 
+    // Request to server
     const response = await fetch("http://localhost:8080/signup", {
       method: "POST",
       headers: {
@@ -27,15 +38,28 @@ function SignUp() {
       body: JSON.stringify({ firstname, lastname, email, password }),
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      if (data.success) {
-        setMessage("User created successfully");
-      } else {
-        setMessage(data.message);
+    // Reset all errors after an submit
+    const responseData = await response.json();
+    setFirstNameError("");
+    setLastNameError("");
+    setEmailError("");
+    setPasswordError("");
+    // Handle response
+    if (!response.ok) {
+      if (responseData.firstNameError) {
+        setFirstNameError(responseData.firstNameError);
+      } if (responseData.lastNameError) {
+        setLastNameError(responseData.lastNameError);
+      } if (responseData.emailError) {
+        setEmailError(responseData.emailError);
+      } if (responseData.passwordError) {
+        setPasswordError(responseData.passwordError);
       }
-    } else {
-      console.log("Error:", response.status);
+    }
+    // sucessful signup
+    else {
+      window.localStorage.setItem('successMsg', responseData.successMsg); // Store the success message
+      window.location.href = "/"; // Redirect to the next page
     }
   };
   return (
@@ -54,11 +78,12 @@ function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        {Message && <div>{Message}</div>}
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
+                error={!!firstNameError} // If its not empty string, set error to true
+                helperText={firstNameError}
                 autoComplete="given-name"
                 name="firstName"
                 required
@@ -70,6 +95,8 @@ function SignUp() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                error={!!lastNameError}
+                helperText={lastNameError}
                 required
                 fullWidth
                 id="lastName"
@@ -80,6 +107,8 @@ function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={!!emailError} // If its not empty string, set error to true
+                helperText={emailError}
                 required
                 fullWidth
                 id="email"
@@ -90,6 +119,8 @@ function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={!!passwordError} // If its not empty string, set error to true
+                helperText={passwordError}
                 required
                 fullWidth
                 name="password"
