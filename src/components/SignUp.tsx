@@ -8,16 +8,16 @@ import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
-import SuccessAlert from './SuccessAlert';
+//import SuccessAlert from './SuccessAlert';
 
 function SignUp() {
   // States
-  const [successMsg, setMessage] = useState<string | null>(null);
+//  const [successMsg, setMessage] = useState<string | null>(null);
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [openAlert, setOpenAlert] = useState(false);
+//  const [openAlert, setOpenAlert] = useState(false);
 
   // Handle submit button press
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
