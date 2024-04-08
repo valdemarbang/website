@@ -10,7 +10,7 @@ export default function MyMap() {
   
   return (
     <Map height={height.current} width={width.current}
-
+    
     defaultCenter={[50.879, 4.6997]} defaultZoom={11}>
       <Marker 
         width={50}
