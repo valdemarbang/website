@@ -1,8 +1,12 @@
+import SignUp from "../components/SignUp.tsx";
+import RootPage from "./root.tsx";
+
 function RegisterPage() {
   return (
-    <div>
-      <h1>Register</h1>
-    </div>
+    <>
+    <RootPage />
+    <SignUp />
+    </>
   );
 }
 
