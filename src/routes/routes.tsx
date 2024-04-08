@@ -3,16 +3,11 @@ import HomePage from "../pages/home.tsx";
 import RegisterPage from "../pages/register.tsx";
 
 function RoutesHandler() {
-  let url = "https://tddd96-g11-blhub.github.io/website";
-  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-    url = "";
-  }
-
   return (
-    <BrowserRouter basename={url}>
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/website" element={<HomePage />} />
+        <Route path="/website/register" element={<RegisterPage />} />
       </Routes>
     </BrowserRouter>
   );
