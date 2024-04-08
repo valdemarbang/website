@@ -75,7 +75,7 @@ function ResponsiveAppBar() {
                     <img src={Logo} width="100" />
                 </Box>
                 <Box sx={{ width: '50%', mx: 'auto' }}>
-                    <Search sx={{ display: 'flex', justifyContent: 'flex-start', flexGrow: 1 }}>
+                    <Search sx={{ display: 'flex', justifyContent: 'flex-start', flexGrow: 1 , width: '100%'}}>
                         <SearchIconWrapper>
                             <SearchIcon />
                         </SearchIconWrapper>
@@ -87,7 +87,7 @@ function ResponsiveAppBar() {
                     </Box>
                     <Box>
                         <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0}}>
                                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                             </IconButton>
                         </Tooltip>
