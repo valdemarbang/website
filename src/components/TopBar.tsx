@@ -13,7 +13,7 @@ import Logo from "/src/assets/blhub-logo.svg";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
-import { useNavigate } from "../react/router";
+import { useNavigate } from "react-router-dom";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
@@ -68,12 +68,14 @@ function ResponsiveAppBar() {
         setAnchorElUser(null);
     };
 
+    const navigate = useNavigate();
+
     return (
         <AppBar position="sticky" sx={{ backgroundColor: "#1F3559" }}>
             <Container maxWidth={false}>
                 <Toolbar disableGutters>
                 <Box>
-                    <div onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
+                    <div onClick={() => navigate("/website/")} style={{ cursor: "pointer" }}>
                         <img src={Logo} width="100" />
                     </div>
                 </Box>
