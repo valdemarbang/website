@@ -6,8 +6,8 @@ function RoutesHandler() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/website" element={<HomePage />} />
+        <Route path="/website/register" element={<RegisterPage />} />
       </Routes>
     </BrowserRouter>
   );
