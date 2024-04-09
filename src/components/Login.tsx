@@ -15,6 +15,12 @@ function Login() {
   // All the error messages are stored in state, so we can display them in the form
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [remember, setRemember] = useState(false);
+
+  // Handle checkbox remember me
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRemember(event.target.checked);
+  };
 
   // Handle submit button press
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -67,6 +73,10 @@ function Login() {
     }
     // sucessful login
     else {
+      if (remember) {
+        localStorage.setItem("email", email);
+        localStorage.setItem("token", responseData.token);
+      }
       window.localStorage.setItem("successMsg", responseData.successMsg); // Store the success message
       window.location.href = "/"; // Redirect to the next page
     }
@@ -114,7 +124,14 @@ function Login() {
             autoComplete="new-password"
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={
+              <Checkbox
+                checked={remember}
+                onChange={handleCheckboxChange}
+                value="remember"
+                color="primary"
+              />
+            }
             label="Remember me"
           />
           <Button
@@ -127,7 +144,7 @@ function Login() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="MAYBE IMPLEMENT LATER?" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
