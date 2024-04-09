@@ -8,26 +8,56 @@ import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
-import SuccessAlert from './SuccessAlert';
 
 function SignUp() {
-  // States
-  const [successMsg, setMessage] = useState<string | null>(null);
+  // All the error messages are stored in state, so we can display them in the form
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [openAlert, setOpenAlert] = useState(false);
 
   // Handle submit button press
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
     // Get form data, if not available set to empty string
-    const firstname = data.get("firstName") || "";
-    const lastname = data.get("lastName") || "";
-    const email = data.get("email") || "";
-    const password = data.get("password") || "";
+    const firstname = (data.get("firstName") || "") as string;
+    const lastname = (data.get("lastName") || "") as string;
+    const email = (data.get("email") || "") as string;
+    const password = (data.get("password") || "") as string;
+    
+    // Reset all errors before validation
+    setFirstNameError("");
+    setLastNameError("");
+    setEmailError("");
+    setPasswordError("");
+
+    // Simple form validation
+    let hasErrors = false; // shitty way of doing this, but it works
+    if (firstname.trim() === "") { // trim removes whitespace
+      setFirstNameError("First name is required");
+      hasErrors = true;
+    }
+
+    if (lastname.trim() === "") {
+      setLastNameError("Last name is required");
+      hasErrors = true;
+    }
+
+    if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
+      setEmailError("Please enter a valid email address");
+      hasErrors = true;
+    }
+
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long");
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
+      return;
+    }
 
     // Request to server
     const response = await fetch("http://localhost:8080/signup", {
@@ -38,30 +68,30 @@ function SignUp() {
       body: JSON.stringify({ firstname, lastname, email, password }),
     });
 
-    // Reset all errors after an submit
+    // Handle response from server, maybe some errors was missed
     const responseData = await response.json();
-    setFirstNameError("");
-    setLastNameError("");
-    setEmailError("");
-    setPasswordError("");
-    // Handle response
     if (!response.ok) {
       if (responseData.firstNameError) {
         setFirstNameError(responseData.firstNameError);
-      } if (responseData.lastNameError) {
+      }
+      if (responseData.lastNameError) {
         setLastNameError(responseData.lastNameError);
-      } if (responseData.emailError) {
+      }
+      if (responseData.emailError) {
         setEmailError(responseData.emailError);
-      } if (responseData.passwordError) {
+      }
+      if (responseData.passwordError) {
         setPasswordError(responseData.passwordError);
       }
     }
     // sucessful signup
     else {
-      window.localStorage.setItem('successMsg', responseData.successMsg); // Store the success message
+      window.localStorage.setItem("successMsg", responseData.successMsg); // Store the success message
       window.location.href = "/"; // Redirect to the next page
     }
   };
+
+  // Create the design of the page
   return (
     <Container maxWidth="xs">
       <Box
@@ -141,7 +171,7 @@ function SignUp() {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/login" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
