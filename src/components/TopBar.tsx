@@ -69,6 +69,7 @@ function ResponsiveAppBar() {
 
     return (
         <AppBar position="sticky" sx={{ backgroundColor: "#1F3559" }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Container maxWidth={false}>
                 <Toolbar disableGutters>
                 <Box>
@@ -116,6 +117,7 @@ function ResponsiveAppBar() {
                     </Box>
                 </Toolbar>
             </Container>
+            </Box>
         </AppBar>
     );
 }
