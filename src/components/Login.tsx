@@ -70,9 +70,7 @@ function Login() {
       if (responseData.passwordError) {
         setPasswordError(responseData.passwordError);
       }
-    }
-    // sucessful login
-    else {
+    } else { // sucessful login
       if (remember) {
         localStorage.setItem("email", email);
         localStorage.setItem("token", responseData.token);
