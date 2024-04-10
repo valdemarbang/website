@@ -1,15 +1,15 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import HomePage from "../pages/home.tsx";
 import RegisterPage from "../pages/register.tsx";
 
 function RoutesHandler() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
-        <Route path="/website" element={<HomePage />} />
-        <Route path="/website/register" element={<RegisterPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
