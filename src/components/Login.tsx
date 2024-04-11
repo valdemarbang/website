@@ -141,7 +141,7 @@ function Login() {
             Sign In
           </Button>
           <Grid item sx={{ textAlign: "right" }}>
-            <Link href="/register" variant="body2">
+            <Link href="/website/#/register" variant="body2">
               {"Don't have an account? Sign Up"}
             </Link>
           </Grid>
