@@ -85,7 +85,7 @@ function ResponsiveAppBar() {
             >
               {/* Render menu items for pages */}
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={() => navigate("/" + page.toLowerCase().replace(" ", "-"))}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -130,7 +130,7 @@ function ResponsiveAppBar() {
             >
               {/* Render menu items for settings */}
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={() => navigate("/" + setting.toLowerCase().replace(" ", "-"))}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
