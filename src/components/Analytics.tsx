@@ -1,6 +1,5 @@
 import { LineChart } from '@mui/x-charts/LineChart';
 import data from "../assets/CONT_LOG.json";
-import { Label } from '@mui/icons-material';
 
 const keyToLabel: { [key: string]: string } = {
   Roll: 'Roll (°)',
