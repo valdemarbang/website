@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react"
 import { Map, Marker } from "pigeon-maps"
-import MyMarker from "./Markers";
 
 function getWindowSize(): [number, number] {
   const {innerWidth, innerHeight} = window;
@@ -28,17 +27,18 @@ export default function MyMap() {
     <Map width={windowSize[0]} height={windowSize[1]-65}
 
     defaultCenter={linkoping} defaultZoom={11}>
-      
-      <MyMarker />
-
+      <Marker 
+        width={50}
+        anchor={[58.5, 15.65]}
+        color={color} 
+        onClick={() => setHue(hue + 20)} 
+      />
       <Marker 
         width={50}
         anchor={[58.45, 15.6]}
         color={color} 
-
         onClick={() => setHue(hue + 20)} 
       />
     </Map>
-    
   )
 }
