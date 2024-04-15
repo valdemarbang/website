@@ -4,7 +4,9 @@
 import { useEffect, useState } from 'react';
 import RootPage from "./root.tsx";
 import Map from "../components/Map.tsx";
+import SideBar from "../components/SideBar.tsx";
 import SuccessAlert from '../components/SuccessAlert.tsx';
+import { ViewSidebar } from '@mui/icons-material';
 
 function HomePage() {
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -20,6 +22,7 @@ function HomePage() {
     <>
       {successMsg && <SuccessAlert open={true} onClose={() => setSuccessMsg(null)} message={successMsg} />}
       <RootPage />
+      <SideBar />
       <Map />
     </>
   );

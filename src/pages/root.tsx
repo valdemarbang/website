@@ -9,8 +9,6 @@ import SideBar from "../components/SideBar.tsx";
 function RootPage() {
   return <>
     <TopBar />
-    <SideBar />
-    //footer?
   </>;
 }
 
