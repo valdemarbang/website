@@ -9,10 +9,20 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ShareIcon from "@mui/icons-material/Share";
 
 /**
+ * MarkerData interface for the MarkerOverlay component
+ */
+interface MarkerData {
+  sensorName: string;
+  image: string;
+  sensorTypes: string;
+  lastUpdated: string;
+}
+
+/**
  * MarkerOverlayProps interface for the MarkerOverlay component
  */
 interface MarkerOverlayProps {
-  markerID: number;
+  markerData: MarkerData;
   closeOverlay: () => void;
 }
 
@@ -22,31 +32,8 @@ interface MarkerOverlayProps {
  * @param closeOverlay - Function to close the overlay from Map.tsx
  * @returns MarkerOverlay component
  */
-const MarkerOverlay: React.FC<MarkerOverlayProps> = ({
-  markerID,
-  closeOverlay,
-}) => {
-  // Fetch marker data from backend
-  const fetchMarkerData = async () => {
-    const response = await fetch(`http://localhost:8080/map/${markerID}`);
-    const data = await response.json();
-    return data;
-  };
-
-  // State for marker data so the overlay can be updated
-  const [markerData, setMarkerData] = useState({
-    sensorName: "",
-    image: "",
-    sensorTypes: "",
-    lastUpdated: "",
-  });
-
-  // Fetch marker data only once on component mount
-  useEffect(() => {
-    fetchMarkerData().then((data) => {
-      setMarkerData(data);
-    });
-  }, [markerID]); // Empty dependency array means this effect runs once on mount
+const MarkerOverlay: React.FC<MarkerOverlayProps> = ({ markerData, closeOverlay }) => {
+  const { sensorName, image, sensorTypes, lastUpdated } = markerData;
 
   return (
     <Box
@@ -66,7 +53,7 @@ const MarkerOverlay: React.FC<MarkerOverlayProps> = ({
             color="text.secondary"
             sx={{ fontFamily: "Outfit" }}
           >
-            {markerData.sensorName}
+            {sensorName}
           </Typography>
         </Grid>
         <Grid item xs={2} sx={{ cursor: "pointer" }}>
@@ -87,7 +74,7 @@ const MarkerOverlay: React.FC<MarkerOverlayProps> = ({
           width: "100%",
         }}
         alt="Sensor image"
-        src={markerData.image}
+        src={image}
       />
       <Grid container direction="row" justifyContent="space-between">
         <Grid item xs={3}>
