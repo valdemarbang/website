@@ -78,7 +78,7 @@ function MapComponent() {
         >
           <MarkerOverlay
             markerID={selectedMarker[0]} // Unique id for selected marker
-            closeOverlay={() => setSelectedMarker(null)} // Close overlay function
+            closeOverlay={() => setSelectedMarker(null)} // Set selected marker to null when overlay is closed
           />
         </Overlay>
       )}
