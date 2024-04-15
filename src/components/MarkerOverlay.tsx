@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -130,6 +129,8 @@ const MarkerOverlay: React.FC<MarkerOverlayProps> = ({ markerData, closeOverlay 
           </Box>
         </Grid>
       </Grid>
+      <p> {sensorTypes} </p>
+      <p> {lastUpdated} </p>
     </Box>
   );
 };
