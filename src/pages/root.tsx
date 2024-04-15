@@ -10,7 +10,6 @@ function RootPage() {
   return <>
     <TopBar />
     <SideBar />
-    //sidebar...
     //footer?
   </>;
 }
