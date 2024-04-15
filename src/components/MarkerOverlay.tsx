@@ -26,13 +26,6 @@ const MarkerOverlay: React.FC<MarkerOverlayProps> = ({
   markerID,
   closeOverlay,
 }) => {
-  // Fetch marker data from backend
-  const fetchMarkerData = async () => {
-    const response = await fetch(`http://localhost:8080/map/${markerID}`);
-    const data = await response.json();
-    return data;
-  };
-
   // State for marker data so the overlay can be updated
   const [markerData, setMarkerData] = useState({
     sensorName: "",
@@ -43,9 +36,13 @@ const MarkerOverlay: React.FC<MarkerOverlayProps> = ({
 
   // Fetch marker data only once on component mount
   useEffect(() => {
-    fetchMarkerData().then((data) => {
+    const fetchData = async () => {
+      const response = await fetch(`http://localhost:8080/map/${markerID}`);
+      const data = await response.json();
       setMarkerData(data);
-    });
+    };
+
+    fetchData();
   }, []); // Empty dependency array means this effect runs once on mount
 
   return (
@@ -59,7 +56,6 @@ const MarkerOverlay: React.FC<MarkerOverlayProps> = ({
           display="flex"
           justifyContent="center"
           alignItems="center"
-          
         >
           <Typography
             variant="h6"
@@ -98,7 +94,10 @@ const MarkerOverlay: React.FC<MarkerOverlayProps> = ({
             sx={{ cursor: "pointer" }}
           >
             <QueryStatsIcon />
-            <Typography variant="caption" sx={{ fontFamily: "Outfit", fontSize: "8px"}}>
+            <Typography
+              variant="caption"
+              sx={{ fontFamily: "Outfit", fontSize: "8px" }}
+            >
               Stats
             </Typography>
           </Box>
@@ -111,7 +110,10 @@ const MarkerOverlay: React.FC<MarkerOverlayProps> = ({
             sx={{ cursor: "pointer" }}
           >
             <BookmarkBorderIcon />
-            <Typography variant="caption" sx={{ fontFamily: "Outfit", fontSize: "8px"}}>
+            <Typography
+              variant="caption"
+              sx={{ fontFamily: "Outfit", fontSize: "8px" }}
+            >
               Bookmark
             </Typography>
           </Box>
@@ -124,7 +126,10 @@ const MarkerOverlay: React.FC<MarkerOverlayProps> = ({
             sx={{ cursor: "pointer" }}
           >
             <FileDownloadIcon />
-            <Typography variant="caption" sx={{ fontFamily: "Outfit", fontSize: "8px"}}>
+            <Typography
+              variant="caption"
+              sx={{ fontFamily: "Outfit", fontSize: "8px" }}
+            >
               Download
             </Typography>
           </Box>
@@ -137,7 +142,10 @@ const MarkerOverlay: React.FC<MarkerOverlayProps> = ({
             sx={{ cursor: "pointer" }}
           >
             <ShareIcon />
-            <Typography variant="caption" sx={{ fontFamily: "Outfit", fontSize: "8px"}}>
+            <Typography
+              variant="caption"
+              sx={{ fontFamily: "Outfit", fontSize: "8px" }}
+            >
               Share
             </Typography>
           </Box>

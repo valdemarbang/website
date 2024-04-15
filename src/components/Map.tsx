@@ -28,10 +28,12 @@ function MapComponent() {
   };
   
   // State for selected marker so the overlay can be updated
+  // Selected marker is an array with id, latitude and longitude
   const [selectedMarker, setSelectedMarker] = useState<
     [number, number, number] | null
   >(null);
 
+  // Function to handle marker click and set selected marker
   const handleMarkerClick = (marker: [number, number, number]) => {
     setSelectedMarker(marker);
   };
@@ -39,7 +41,7 @@ function MapComponent() {
   // Fetch coordinates only once on component mount
   useEffect(() => {
     fetchCoordinates().then((data) => {
-      let markersData: [number, number, number][] = data.markers.map(
+      const markersData: [number, number, number][] = data.markers.map(
         (marker: { id: number; lat: number; lng: number }) => [
           marker.id,
           marker.lat,
