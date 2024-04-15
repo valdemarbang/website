@@ -10,6 +10,10 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 //import SuccessAlert from './SuccessAlert';
 
+/**
+ * SignUp component displays a form for user to sign up
+ * @returns SignUp component
+ */
 function SignUp() {
   // States
 //  const [successMsg, setMessage] = useState<string | null>(null);
