@@ -39,7 +39,6 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
   // Hook for navigation
   const navigate = useNavigate();
 

@@ -1,44 +1,87 @@
-import { useState, useEffect } from "react"
-import { Map, Marker } from "pigeon-maps"
+import { useEffect, useState } from "react";
+import { Map, ZoomControl, Marker, Overlay } from "pigeon-maps";
+import { Cluster } from "pigeon-maps-cluster";
+import MarkerOverlay from "./MarkerOverlay.tsx";
 
-function getWindowSize(): [number, number] {
-  const {innerWidth, innerHeight} = window;
-  return [innerWidth, innerHeight];
-}
-
-export default function MyMap() {
-  const [hue, setHue] = useState(0)
-  const color = `hsl(${hue % 360}deg 39% 70%)`
-
+/**
+ * MapComponent displays the map with markers and overlay
+ * @returns Map component with markers and overlay
+ */
+function MapComponent() {
+  // Start position for the map
   const linkoping: [number, number] = [58.4, 15.625278];
 
-  const [windowSize, setWindowSize] = useState(getWindowSize());
+  /**
+   * State for selected marker data and handle marker click
+   */
+  const [selectedMarkerData, setSelectedMarkerData] = useState(null);
+  const [selectedMarkerCoordinates, setSelectedMarkerCoordinates] = useState<[number, number] | undefined>();
+  
+  const handleMarkerClick = async (markerID: number, coordinates: [number, number]) => {
+    const response = await fetch(`http://localhost:8080/map/${markerID}`);
+    const data = await response.json();
+    setSelectedMarkerData(data);
+    setSelectedMarkerCoordinates(coordinates);
+  };
 
-  const handleWindowResize = () => {
-      setWindowSize(getWindowSize());
-  } 
+  /**
+   * Fetches coordinates from the backend when the website loads
+   * @returns Array of coordinates
+   */
+  const fetchCoordinates = async () => {
+    const response = await fetch("http://localhost:8080/map");
+    const data = await response.json();
+    return data;
+  };
+
+  const [mapMarkersData, setMapMarkersData] = useState<
+    [number, number, number][]
+  >([]);
 
   useEffect(() => {
-    window.addEventListener('resize', handleWindowResize);
-    return () => { window.removeEventListener('resize', handleWindowResize) };
-  }, []);
+    fetchCoordinates().then((data) => {
+      const mapMarkersData: [number, number, number][] = data.markers.map(
+        (marker: { id: number; lat: number; lng: number }) => [
+          marker.id,
+          marker.lat,
+          marker.lng,
+        ]
+      );
+      setMapMarkersData(mapMarkersData);
+    });
+  }, []); // Empty dependency array means this effect runs once on mount
 
   return (
-    <Map width={windowSize[0]} height={windowSize[1]-65}
-
-    defaultCenter={linkoping} defaultZoom={11}>
-      <Marker 
-        width={50}
-        anchor={[58.5, 15.65]}
-        color={color} 
-        onClick={() => setHue(hue + 20)} 
-      />
-      <Marker 
-        width={50}
-        anchor={[58.45, 15.6]}
-        color={color} 
-        onClick={() => setHue(hue + 20)} 
-      />
+    <Map
+      defaultCenter={linkoping}
+      defaultZoom={3}
+      onClick={() => setSelectedMarkerData(null)}
+    >
+      <Cluster>
+        {mapMarkersData.map((marker: [number, number, number]) => (
+          <Marker
+          onClick={() => handleMarkerClick(marker[0], [marker[1], marker[2]])}
+            key={marker[0]} // Unique id for each marker
+            anchor={[marker[1], marker[2]]} // Latitude and longitude
+            color="#1F3559"
+          ></Marker>
+        ))}
+      </Cluster>
+      <ZoomControl />
+      {selectedMarkerData && (
+        <Overlay
+          anchor={selectedMarkerCoordinates}
+          offset={[50, 50]}
+          style={{ zIndex: 1 }} // Render overlay on top of markers/clusters
+        >
+          <MarkerOverlay // Create MarkerOverlay component
+            markerData={selectedMarkerData} // Unique id for selected marker
+            closeOverlay={() => setSelectedMarkerData(null)} // Set selected marker to null when overlay is closed
+          />
+        </Overlay>
+      )}
     </Map>
-  )
+  );
 }
+
+export default MapComponent;

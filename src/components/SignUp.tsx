@@ -9,6 +9,10 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 
+/**
+ * SignUp component displays a form for user to sign up
+ * @returns SignUp component
+ */
 function SignUp() {
   // All the error messages are stored in state, so we can display them in the form
   const [firstNameError, setFirstNameError] = useState("");
