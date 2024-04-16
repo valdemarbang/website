@@ -29,6 +29,7 @@ function HomePage() {
       )}
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <RootPage />
+        <SideBar />
         <Map />
       </Box>
     </>

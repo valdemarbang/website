@@ -6,11 +6,9 @@
 import TopBar from "../components/TopBar.tsx";
 
 function RootPage() {
-  return (
+  return <>
     <TopBar />
-    //sidebar...
-    //footer?
-  );
+  </>;
 }
 
 export default RootPage;
