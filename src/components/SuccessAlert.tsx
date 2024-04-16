@@ -1,5 +1,7 @@
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 /**
  * SuccessAlertProps interface for the SuccessAlert component
@@ -24,12 +26,14 @@ const SuccessAlert: React.FC<SuccessAlertProps> = ({ open, onClose, message }) =
       autoHideDuration={6000}
       onClose={onClose}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-    >
-      <Alert onClose={onClose} severity="success" sx={{ width: '100%' }}>
-        {message}
-      </Alert>
-    </Snackbar>
-  );
-};
+      message={message}
+      action={
+        <IconButton size="small" aria-label="close" color="inherit" onClick={onClose}>
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      }
+      />
+    );
+  }
 
 export default SuccessAlert;
