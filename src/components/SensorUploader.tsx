@@ -3,17 +3,23 @@ import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import SensorsIcon from '@mui/icons-material/Sensors';
 import CloseIcon from '@mui/icons-material/Close';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import Typography from "@mui/material/Typography";
-import { InputLabel, MenuItem, Select } from "@mui/material";
+import { MenuItem } from "@mui/material";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useState} from "react";
 import { MuiFileInput } from "mui-file-input";
 
 function SensorUploader() {
-  const [file, setFile] = useState<File | null>(null)
-  const handleChange = (newValue: File | null) => {
-    setFile(newValue)
+  const [typeFile, setTypeFile] = useState<File | null>(null)
+  const handleTypeChange = (newValue: File | null) => {
+    setTypeFile(newValue)
+  }
+
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const handleImageChange = (newValue: File | null) => {
+    setImageFile(newValue)
   }
 
   // Handle submit button press
@@ -23,13 +29,15 @@ function SensorUploader() {
     const data = new FormData(event.currentTarget);
 
     // Get form data, if not available set to empty string
-    const longitude = (data.get("longitude") || "") as string;
     const latitude = (data.get("latitude") || "") as string;
+    const longitude = (data.get("longitude") || "") as string;
     const type = (data.get("type") || "") as string;
 
-    if (file == null) {
+    if (typeFile == null) {
       return
     }
+
+    const timestamp = Date.now()
 
     // Request to server
     const response = await fetch("http://localhost:8080/add-sensor", {
@@ -37,7 +45,7 @@ function SensorUploader() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ longitude, latitude, type, file }),
+      body: JSON.stringify({ latitude, longitude, type, typeFile, imageFile, timestamp }),
     });
 
     // Handle response from server, maybe some errors was missed
@@ -87,28 +95,47 @@ function SensorUploader() {
             name="latitude"
             label="Latitude"
           />
-          <InputLabel id="type-label">Sensor type</InputLabel>
-          <Select
-            labelId="type-label"
-            required
+          <TextField
             id="type"
-            label="Type">
-            <MenuItem value={0}>Pressure</MenuItem>
-            <MenuItem value={1}>Temperature</MenuItem>
-            <MenuItem value={2}>Acceleration</MenuItem>
-            <MenuItem value={3}>Gyro</MenuItem>
-            <MenuItem value={4}>Angle</MenuItem>
-            <MenuItem value={5}>Other</MenuItem>
-          </Select>
-          <Box>
-            <InputLabel id="data-label">Import data from .csv file</InputLabel>
-            <MuiFileInput
-            value={file} onChange={handleChange} inputProps={{ accept: '.csv' }} 
+            required
+            select
+            label="Select a sensor type"
+            margin="normal"
+            fullWidth
+            helperText="Please select your sensor type">
+              <MenuItem value={1}>Pressure</MenuItem>
+              <MenuItem value={2}>Temperature</MenuItem>
+              <MenuItem value={3}>Acceleration</MenuItem>
+              <MenuItem value={4}>Gyro</MenuItem>
+              <MenuItem value={5}>Angle</MenuItem>
+              <MenuItem value={6}>Other</MenuItem>
+          </TextField>
+          <MuiFileInput
+            fullWidth
+            margin="normal"
+            placeholder="Upload an image"
+            value={imageFile} onChange={handleImageChange} inputProps={{ accept: '.jpg, .jpeg, .png' }} 
             clearIconButtonProps={{
               title: "Remove",
               children: <CloseIcon fontSize="small"/>
-            }}/>
-          </Box>
+            }}
+            InputProps={{
+            startAdornment: <AttachFileIcon />
+            }}
+          />
+          <MuiFileInput
+            fullWidth
+            margin="normal"
+            placeholder="Select a .csv file to upload"
+            value={typeFile} onChange={handleTypeChange} inputProps={{ accept: '.csv' }} 
+            clearIconButtonProps={{
+              title: "Remove",
+              children: <CloseIcon fontSize="small"/>
+            }}
+            InputProps={{
+            startAdornment: <AttachFileIcon />
+            }}
+          />
           <Button
             type="submit"
             fullWidth
