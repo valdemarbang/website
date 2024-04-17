@@ -12,9 +12,9 @@ import { useState} from "react";
 import { MuiFileInput } from "mui-file-input";
 
 function SensorUploader() {
-  const [typeFile, setTypeFile] = useState<File | null>(null)
-  const handleTypeChange = (newValue: File | null) => {
-    setTypeFile(newValue)
+  const [dataFile, setDataFile] = useState<File | null>(null)
+  const handleDataChange = (newValue: File | null) => {
+    setDataFile(newValue)
   }
 
   const [imageFile, setImageFile] = useState<File | null>(null)
@@ -26,26 +26,40 @@ function SensorUploader() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
-    const data = new FormData(event.currentTarget);
+    const form = new FormData(event.currentTarget);
 
     // Get form data, if not available set to empty string
-    const latitude = (data.get("latitude") || "") as string;
-    const longitude = (data.get("longitude") || "") as string;
-    const type = (data.get("type") || "") as string;
+    const latitude = (form.get("latitude") || "") as string;
+    const longitude = (form.get("longitude") || "") as string;
+    const sensorType = (form.get("type") || "") as string;
 
-    if (typeFile == null) {
+    console.log(latitude, longitude, sensorType)
+
+    if (dataFile == null) {
       return
     }
 
-    const timestamp = Date.now()
+    const timestamp = Date.now();
+    const reader = new FileReader();
+
+    reader.readAsText(dataFile);
+    const data = reader.result as string;
+
+    console.log(timestamp);
+
+    let image = "";
+    if (imageFile != null) {
+      reader.readAsText(imageFile);
+      image = reader.result as string;
+    }
 
     // Request to server
-    const response = await fetch("http://localhost:8080/add-sensor", {
+    const response = await fetch("http://localhost:8080/sensordata/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ latitude, longitude, type, typeFile, imageFile, timestamp }),
+      body: JSON.stringify({ latitude, longitude, timestamp }),
     });
 
     // Handle response from server, maybe some errors was missed
@@ -77,6 +91,15 @@ function SensorUploader() {
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
+            helperText="The position's latitude coordinate"
+            required
+            fullWidth
+            margin="normal"
+            id="latitude"
+            name="latitude"
+            label="Latitude"
+          />
+          <TextField
             helperText="The position's longitude coordinate."
             required
             fullWidth
@@ -85,15 +108,6 @@ function SensorUploader() {
             label="Longitude"
             name="longitude"
             autoFocus
-          />
-          <TextField
-            helperText="The position's latitude coordinate"
-            required
-            fullWidth
-            margin="normal"
-            id="latitude"
-            name="latitude"
-            label="Latitude"
           />
           <TextField
             id="type"
@@ -127,7 +141,7 @@ function SensorUploader() {
             fullWidth
             margin="normal"
             placeholder="Select a .csv file to upload"
-            value={typeFile} onChange={handleTypeChange} inputProps={{ accept: '.csv' }} 
+            value={dataFile} onChange={handleDataChange} inputProps={{ accept: '.csv' }} 
             clearIconButtonProps={{
               title: "Remove",
               children: <CloseIcon fontSize="small"/>
