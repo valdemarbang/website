@@ -62,11 +62,11 @@ function SensorUploader() {
     });
 
     // Handle response from server, maybe some errors was missed
-    const responseData = await response.json();
+    await response.json();
     if (!response.ok) {
-      // Lol, smile
+      alert("Failed to send sensor data to server")
     } else {
-      // Workeed
+      // Worked
     }
   };
 
