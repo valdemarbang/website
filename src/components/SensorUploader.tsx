@@ -5,11 +5,21 @@ import SensorsIcon from '@mui/icons-material/Sensors';
 import CloseIcon from '@mui/icons-material/Close';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import Typography from "@mui/material/Typography";
-import { MenuItem } from "@mui/material";
+import { MenuItem, SelectChangeEvent } from "@mui/material";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { useState} from "react";
+import { useState } from "react";
 import { MuiFileInput } from "mui-file-input";
+
+function getCurrentRFC3339DateTime(): string {
+  const now = new Date();
+  const isoString = now.toISOString();
+
+  // Remove the milliseconds part and 'Z' suffix
+  const trimmedISOString = isoString.slice(0, -5) + "Z";
+
+  return trimmedISOString;
+}
 
 function SensorUploader() {
   const [dataFile, setDataFile] = useState<File | null>(null)
@@ -22,6 +32,8 @@ function SensorUploader() {
     setImageFile(newValue)
   }
 
+  const [ sensorType, setSensorType ] = useState("");
+
   // Handle submit button press
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,9 +41,8 @@ function SensorUploader() {
     const form = new FormData(event.currentTarget);
 
     // Get form data, if not available set to empty string
-    const latitude = (form.get("latitude") || "") as string;
-    const longitude = (form.get("longitude") || "") as string;
-    const sensorType = (form.get("type") || "") as string;
+    const latitude = +(form.get("latitude") || 0);
+    const longitude = +(form.get("longitude") || 0);
 
     console.log(latitude, longitude, sensorType)
 
@@ -39,19 +50,7 @@ function SensorUploader() {
       return
     }
 
-    const timestamp = Date.now();
-    const reader = new FileReader();
-
-    reader.readAsText(dataFile);
-    const data = reader.result as string;
-
-    console.log(timestamp);
-
-    let image = "";
-    if (imageFile != null) {
-      reader.readAsText(imageFile);
-      image = reader.result as string;
-    }
+    const timestamp = getCurrentRFC3339DateTime();
 
     // Request to server
     const response = await fetch("http://localhost:8080/sensordata/add", {
@@ -59,7 +58,7 @@ function SensorUploader() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ latitude, longitude, timestamp }),
+      body: JSON.stringify({ latitude, longitude, sensorType, timestamp }),
     });
 
     // Handle response from server, maybe some errors was missed
@@ -94,6 +93,7 @@ function SensorUploader() {
             helperText="The position's latitude coordinate"
             required
             fullWidth
+            type="number"
             margin="normal"
             id="latitude"
             name="latitude"
@@ -103,6 +103,7 @@ function SensorUploader() {
             helperText="The position's longitude coordinate."
             required
             fullWidth
+            type="number"
             margin="normal"
             id="longitude"
             label="Longitude"
@@ -116,13 +117,16 @@ function SensorUploader() {
             label="Select a sensor type"
             margin="normal"
             fullWidth
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setSensorType(event.target.value);
+            }}
             helperText="Please select your sensor type">
-              <MenuItem value={1}>Pressure</MenuItem>
-              <MenuItem value={2}>Temperature</MenuItem>
-              <MenuItem value={3}>Acceleration</MenuItem>
-              <MenuItem value={4}>Gyro</MenuItem>
-              <MenuItem value={5}>Angle</MenuItem>
-              <MenuItem value={6}>Other</MenuItem>
+              <MenuItem value="Pressure">Pressure</MenuItem>
+              <MenuItem value="Temperature">Temperature</MenuItem>
+              <MenuItem value="Acceleration">Acceleration</MenuItem>
+              <MenuItem value="Gyro">Gyro</MenuItem>
+              <MenuItem value="Angle">Angle</MenuItem>
+              <MenuItem value="Other">Other</MenuItem>
           </TextField>
           <MuiFileInput
             fullWidth
