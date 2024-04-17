@@ -5,7 +5,7 @@ import SensorsIcon from '@mui/icons-material/Sensors';
 import CloseIcon from '@mui/icons-material/Close';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import Typography from "@mui/material/Typography";
-import { MenuItem, SelectChangeEvent } from "@mui/material";
+import { MenuItem } from "@mui/material";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
