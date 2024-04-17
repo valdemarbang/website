@@ -18,7 +18,7 @@ interface DownloadProps {
  * @param data : Data from the server
  * @param filename : Name of the file downloaded
  */
-function downloadJsonFile(data: any, filename: string) {
+function downloadJsonFile(data: string, filename: string) {
   const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
