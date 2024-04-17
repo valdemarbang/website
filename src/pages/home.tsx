@@ -20,14 +20,8 @@ function HomePage() {
 
   return (
     <>
-      {successMsg && (
-        <SuccessAlert
-          open={true}
-          onClose={() => setSuccessMsg(null)}
-          message={successMsg}
-        />
-      )}
-      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh"}}>
+      {successMsg && <SuccessAlert open={true} message={successMsg} />}
+      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <RootPage />
         <Map />
       </Box>

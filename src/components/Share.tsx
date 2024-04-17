@@ -2,8 +2,8 @@ import copy from "copy-to-clipboard";
 import { Box } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import Typography from "@mui/material/Typography";
-import SuccessAlert from "./SuccessAlert";
-import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 /**
  * ShareProps interface for the Share component
@@ -18,17 +18,22 @@ interface shareProps {
  */
 function Share({ markerID, sxDesign }: shareProps) {
   const currentHost = `${window.location.protocol}//${window.location.hostname}`;
-  const [alertOpen, setAlertOpen] = useState(false);
+  
 
   const handleShare = () => {
     copy(`${currentHost}/analytics/${markerID}`);
-    setAlertOpen(true);
+    toast.success("Link copied to clipboard", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   };
 
-  const handleCloseAlert = () => {
-    setAlertOpen(false);
-  };
-  
   return (
     <Box
       display="flex"
@@ -37,17 +42,24 @@ function Share({ markerID, sxDesign }: shareProps) {
       sx={sxDesign}
       onClick={handleShare}
     >
-      <SuccessAlert
-        open={alertOpen}
-        onClose={handleCloseAlert}
-        message={"Link copied to clipboard"}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
       />
       <ShareIcon />
       <Typography
         variant="caption"
         sx={{ fontFamily: "Outfit", fontSize: "8px" }}
       >
-        Download
+        Share
       </Typography>
     </Box>
   );

@@ -1,39 +1,42 @@
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import * as React from "react";
 
 /**
  * SuccessAlertProps interface for the SuccessAlert component
  */
 interface SuccessAlertProps {
   open: boolean;
-  onClose: () => void;
-  message: string; 
+  message: string;
 }
 
 /**
  * SuccessAlert component displays a success alert when an action is successful.
- * @param open - Boolean to open or close the alert
- * @param onClose - Function to close the alert
  * @param message - Message to display in the alert
- * @returns 
+ * @returns - A success alert component
  */
-const SuccessAlert: React.FC<SuccessAlertProps> = ({ open, onClose, message }) => {
+const SuccessAlert: React.FC<SuccessAlertProps> = ({
+  open,
+  message,
+}) => {
   return (
-    <Snackbar
-      open={open}
-      autoHideDuration={6000}
-      onClose={onClose}
-      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      message={message}
-      action={
-        <IconButton size="small" aria-label="close" color="inherit" onClick={onClose}>
-          <CloseIcon fontSize="small" />
-        </IconButton>
-      }
-      />
-    );
-  }
+    <div>
+      <Snackbar
+        open={open}
+        autoHideDuration={4000}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        sx={{ width: "95%" }}
+      >
+        <Alert
+          severity="success"
+          variant="filled"
+          sx={{ width: "95%" }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
+    </div>
+  );
+};
 
 export default SuccessAlert;
