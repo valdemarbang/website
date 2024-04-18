@@ -59,22 +59,33 @@ function SensorUploader() {
 
     const timestamp = getCurrentRFC3339DateTime();
 
-    // Request to server
-    const response = await fetch("http://localhost:8080/sensordata/add", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ latitude, longitude, sensorType, timestamp }),
-    });
+    // Read CSV data from file:
+    let reader = new FileReader();
+    
+    reader.onload = async () => {
+      const data = reader.result as string;
 
-    // Handle response from server, maybe some errors was missed
-    await response.json();
-    if (!response.ok) {
-      alert("Failed to send sensor data to server");
-    } else {
-      navigate("/");
+      // Request to server
+      const response = await fetch("http://localhost:8080/sensordata/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ latitude, longitude, sensorType, data, timestamp }),
+      });
+  
+      // Handle response from server, maybe some errors was missed
+      await response.json();
+      if (!response.ok) {
+        alert("Failed to send sensor data to server");
+      } else {
+        navigate("/");
+      }
     }
+    
+    reader.onerror = () => {
+      alert(reader.error)
+    };
   };
 
 
