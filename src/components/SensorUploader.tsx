@@ -60,7 +60,7 @@ function SensorUploader() {
     const timestamp = getCurrentRFC3339DateTime();
 
     // Read CSV data from file:
-    let reader = new FileReader();
+    const reader = new FileReader();
     
     reader.onload = async () => {
       const data = reader.result as string;
