@@ -10,6 +10,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import { MuiFileInput } from "mui-file-input";
+import { useNavigate } from "react-router-dom";
 
 function getCurrentRFC3339DateTime(): string {
   const now = new Date();
@@ -34,6 +35,8 @@ function SensorUploader() {
 
   const [ sensorType, setSensorType ] = useState("");
 
+  const navigate = useNavigate();
+
   // Handle submit button press
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -44,9 +47,13 @@ function SensorUploader() {
     const latitude = +(form.get("latitude") || 0);
     const longitude = +(form.get("longitude") || 0);
 
-    console.log(latitude, longitude, sensorType)
+    if (latitude == 0 || longitude == 0 || sensorType == "") {
+      alert("Please fill out all required fields");
+      return
+    } 
 
     if (dataFile == null) {
+      alert("Please select a .csv file with sensor data");
       return
     }
 
@@ -64,9 +71,9 @@ function SensorUploader() {
     // Handle response from server, maybe some errors was missed
     await response.json();
     if (!response.ok) {
-      alert("Failed to send sensor data to server")
+      alert("Failed to send sensor data to server");
     } else {
-      // Worked
+      navigate("/");
     }
   };
 
