@@ -3,17 +3,19 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import ShareIcon from "@mui/icons-material/Share";
+import { useNavigate } from "react-router-dom";
+import Bookmark from "./Bookmark.tsx";
+import Download from "./Download.tsx";
+import Share from "./Share.tsx";
 
 /**
  * MarkerData interface for the MarkerOverlay component
  */
 interface MarkerData {
+  sensorID: number;
   sensorName: string;
-  image: string;
-  sensorTypes: string;
+  sensorImage: string;
+  sensorTypes: [{ type: string; unit: string }];
   lastUpdated: string;
 }
 
@@ -31,26 +33,34 @@ interface MarkerOverlayProps {
  * @param closeOverlay - Function to close the overlay from Map.tsx
  * @returns MarkerOverlay component
  */
-const MarkerOverlay: React.FC<MarkerOverlayProps> = ({ markerData, closeOverlay }) => {
-  const { sensorName, image, sensorTypes, lastUpdated } = markerData;
+const MarkerOverlay: React.FC<MarkerOverlayProps> = ({
+  markerData,
+  closeOverlay,
+}) => {
+  const { sensorID, sensorName, sensorImage, sensorTypes, lastUpdated } =
+    markerData;
+  const navigate = useNavigate();
 
   return (
     <Box
-      sx={{ width: 225, height: 325, bgcolor: "white", borderRadius: "16px" }}
+      sx={{
+        bgcolor: "white",
+        borderRadius: "16px",
+        maxWidth: "225px",
+      }}
     >
       <Grid container>
         <Grid
           item
           xs={10}
           display="flex"
-          justifyContent="center"
-          alignItems="center"
-          
+          justifyContent="left"
+          alignItems="left"
         >
           <Typography
-            variant="h6"
+            fontSize={15}
             color="text.secondary"
-            sx={{ fontFamily: "Outfit" }}
+            sx={{ fontFamily: "Outfit", ml: 1 }}
           >
             {sensorName}
           </Typography>
@@ -65,72 +75,101 @@ const MarkerOverlay: React.FC<MarkerOverlayProps> = ({ markerData, closeOverlay 
             <HighlightOffIcon onClick={closeOverlay} />
           </Box>
         </Grid>
+        <Grid
+          item
+          xs={12}
+          display="flex"
+          justifyContent="left"
+          alignItems="left"
+        >
+          <Typography
+            fontSize={10}
+            color="grey"
+            sx={{ fontFamily: "Inter", ml: 1 }}
+          >
+            Last updated:&nbsp;
+            {lastUpdated}
+          </Typography>
+        </Grid>
       </Grid>
       <Box
         component="img"
         sx={{
-          height: "50%",
-          width: "100%",
+          height: "150px",
+          width: "225px",
+          margin: "auto",
         }}
         alt="Sensor image"
-        src={image}
+        src={sensorImage}
       />
-      <Grid container direction="row" justifyContent="space-between">
+      <Typography
+        variant="h6"
+        color="text.secondary"
+        sx={{ textAlign: "center", fontFamily: "Outfit" }}
+      >
+        Sensor data
+      </Typography>
+      <Grid container spacing={2}>
+        {sensorTypes.map(
+          (sensorType: { type: string; unit: string }, index: number) => (
+            <Grid item xs={6} key={index}>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                sx={{ cursor: "pointer" }}
+              >
+                <Typography fontSize="11px">{sensorType.type}</Typography>
+                <Typography fontSize="11px">{sensorType.unit}</Typography>
+              </Box>
+            </Grid>
+          )
+        )}
+      </Grid>
+      <Grid
+        container
+        direction="row"
+        alignItems="flex-end"
+        justifyContent="space-evenly"
+      >
         <Grid item xs={3}>
           <Box
+            onClick={() => navigate("/analytics/" + sensorID)}
             display="flex"
             flexDirection="column"
             alignItems="center"
-            sx={{ cursor: "pointer" }}
+            sx={{ cursor: "pointer", borderTop: 1, borderRight: 1 }}
           >
             <QueryStatsIcon />
-            <Typography variant="caption" sx={{ fontFamily: "Outfit", fontSize: "8px"}}>
+            <Typography
+              variant="caption"
+              sx={{ fontFamily: "Outfit", fontSize: "8px" }}
+            >
               Stats
             </Typography>
           </Box>
         </Grid>
         <Grid item xs={3}>
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            sx={{ cursor: "pointer" }}
-          >
-            <BookmarkBorderIcon />
-            <Typography variant="caption" sx={{ fontFamily: "Outfit", fontSize: "8px"}}>
-              Bookmark
-            </Typography>
-          </Box>
+          <Bookmark
+            markerID={sensorID}
+            userID={1}
+            sxDesign={{ cursor: "pointer", borderTop: 1, borderRight: 1 }}
+          />
         </Grid>
         <Grid item xs={3}>
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            sx={{ cursor: "pointer" }}
-          >
-            <FileDownloadIcon />
-            <Typography variant="caption" sx={{ fontFamily: "Outfit", fontSize: "8px"}}>
-              Download
-            </Typography>
-          </Box>
+          <Download
+            markerID={sensorID}
+            sensorName={sensorName}
+            sxDesign={{ cursor: "pointer", borderTop: 1, borderRight: 1 }}
+          />
         </Grid>
         <Grid item xs={3}>
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            sx={{ cursor: "pointer" }}
-          >
-            <ShareIcon />
-            <Typography variant="caption" sx={{ fontFamily: "Outfit", fontSize: "8px"}}>
-              Share
-            </Typography>
-          </Box>
+          <Share
+            markerID={sensorID}
+            sxDesign={{ cursor: "pointer", borderTop: 1 }}
+          />
         </Grid>
       </Grid>
-      <p> {sensorTypes} </p>
-      <p> {lastUpdated} </p>
     </Box>
   );
 };

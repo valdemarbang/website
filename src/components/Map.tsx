@@ -55,7 +55,9 @@ function MapComponent() {
     <Map
       defaultCenter={linkoping}
       defaultZoom={3}
+      minZoom={2}
       onClick={() => setSelectedMarkerData(null)}
+      limitBounds="edge"
     >
       <Cluster>
         {mapMarkersData.map((marker: [number, number, number]) => (
