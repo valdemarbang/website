@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import { Map, ZoomControl, Marker, Overlay, Point } from "pigeon-maps";
 import { Cluster } from "pigeon-maps-cluster";
 import MarkerOverlay from "./MarkerOverlay.tsx";
+import SensorLocations from "./SensorLocations.tsx";
+import { Box } from "@mui/material";
 
 /**
  * Interface for coordinate data
  */
 interface coordinateData {
-  ID: number;
-  latitude: number;
-  longitude: number;
+  id: number;
+  lat: number;
+  lng: number;
 }
 
 /**
@@ -27,13 +29,15 @@ function MapComponent() {
    * @returns Selected marker data and coordinates
    */
   const [selectedMarkerData, setSelectedMarkerData] = useState(null);
-  const [selectedMarkerCoordinates, setSelectedMarkerCoordinates] = useState<Point | undefined>(undefined);
+  const [selectedMarkerCoordinates, setSelectedMarkerCoordinates] = useState<
+    Point | undefined
+  >(undefined);
 
-  const handleMarkerClick = async (markerData: coordinateData) => {
-    const response = await fetch(`http://localhost:8080/map/${markerData.ID}`);
+  const handleMarkerClick = async (marker: coordinateData) => {
+    const response = await fetch(`http://localhost:8080/map/${marker.id}`);
     const data = await response.json();
     setSelectedMarkerData(data);
-    setSelectedMarkerCoordinates([markerData.latitude, markerData.longitude]);
+    setSelectedMarkerCoordinates([marker.lat, marker.lng]);
   };
 
   /**
@@ -50,38 +54,53 @@ function MapComponent() {
       .catch((error) => console.error("Error:", error));
   }, []);
 
+  const [bounds, setBounds] = useState({ ne: [0, 0], sw: [0, 0] });
+
   return (
-    <Map
-      defaultCenter={linkoping}
-      defaultZoom={3}
-      onClick={() => setSelectedMarkerData(null)} // Remove marker overlay when map is clicked
-    >
-      <Cluster>
-        {mapMarkersData.map((marker: coordinateData) => (
-          <Marker
-            onClick={() =>
-              handleMarkerClick(marker)
-            }
-            key={marker.ID} // Unique id for each marker
-            anchor={[marker.latitude, marker.longitude]} // Latitude and longitude
-            color="#1F3559"
-          ></Marker>
-        ))}
-      </Cluster>
-      <ZoomControl />
-      {selectedMarkerData && (
-        <Overlay
-          anchor={selectedMarkerCoordinates}
-          offset={[50, 50]}
-          style={{ zIndex: 1 }} // Render overlay on top of markers/clusters
-        >
-          <MarkerOverlay // Create MarkerOverlay component
-            markerData={selectedMarkerData} // Unique id for selected marker
-            closeOverlay={() => setSelectedMarkerData(null)} // Set selected marker to null when overlay is closed
-          />
-        </Overlay>
-      )}
-    </Map>
+    <Box width="100%" height="100%" overflow="hidden">
+      <Map
+        defaultCenter={linkoping}
+        defaultZoom={3}
+        minZoom={2}
+        onClick={() => setSelectedMarkerData(null)} // remove maker overlay when map is clicked
+        limitBounds="edge"
+        onBoundsChanged={({ center, zoom, bounds }) => {
+          setBounds(bounds);
+        }}
+      >
+        <Cluster>
+          {mapMarkersData.map((marker: coordinateData) => (
+            <Marker
+              onClick={() => handleMarkerClick(marker)}
+              key={marker.id} // Unique id for each marker
+              anchor={[marker.lat, marker.lng]} // Latitude and longitude
+              color="#1F3559"
+            ></Marker>
+          ))}
+        </Cluster>
+        <ZoomControl />
+        {selectedMarkerData && (
+          <Overlay
+            anchor={selectedMarkerCoordinates}
+            offset={[50, 50]}
+            style={{ zIndex: 1 }} // Render overlay on top of markers/clusters
+          >
+            <MarkerOverlay // Create MarkerOverlay component
+              markerData={selectedMarkerData} // Unique id for selected marker
+              closeOverlay={() => setSelectedMarkerData(null)} // Set selected marker to null when overlay is closed
+            />
+          </Overlay>
+        )}
+      </Map>
+      <Box
+        position="absolute"
+        bottom={0}
+        right={0}
+        sx={{ width: "auto", height: "auto" }}
+      >
+        <SensorLocations mapBounds=bounds/>
+      </Box>
+    </Box>
   );
 }
 

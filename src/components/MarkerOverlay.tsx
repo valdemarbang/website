@@ -33,10 +33,8 @@ interface MarkerOverlayProps {
  * @param closeOverlay - Function to close the overlay from Map.tsx
  * @returns MarkerOverlay component
  */
-const MarkerOverlay: React.FC<MarkerOverlayProps> = ({
-  markerData,
-  closeOverlay,
-}) => {
+function MarkerOverlay({ markerData, closeOverlay }: MarkerOverlayProps) {
+  // TODO: REMOVE UGLY STYLING
   const { sensorID, sensorName, sensorImage, sensorTypes, lastUpdated } =
     markerData;
   const navigate = useNavigate();
@@ -172,6 +170,6 @@ const MarkerOverlay: React.FC<MarkerOverlayProps> = ({
       </Grid>
     </Box>
   );
-};
+}
 
 export default MarkerOverlay;
