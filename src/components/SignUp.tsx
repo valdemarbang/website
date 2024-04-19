@@ -17,6 +17,7 @@ function SignUp() {
   // All the error messages are stored in state, so we can display them in the form
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
+  const [userNameError, setUserNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
@@ -28,18 +29,21 @@ function SignUp() {
     // Get form data, if not available set to empty string
     const firstname = (data.get("firstName") || "") as string;
     const lastname = (data.get("lastName") || "") as string;
+    const username = (data.get("userName") || "") as string;
     const email = (data.get("email") || "") as string;
     const password = (data.get("password") || "") as string;
-    
+
     // Reset all errors before validation
     setFirstNameError("");
     setLastNameError("");
+    setUserNameError("");
     setEmailError("");
     setPasswordError("");
 
     // Simple form validation
     let hasErrors = false; // shitty way of doing this, but it works
-    if (firstname.trim() === "") { // trim removes whitespace
+    if (firstname.trim() === "") {
+      // trim removes whitespace
       setFirstNameError("First name is required");
       hasErrors = true;
     }
@@ -48,14 +52,22 @@ function SignUp() {
       setLastNameError("Last name is required");
       hasErrors = true;
     }
+    if (username.trim() === "") {
+      setUserNameError("Username is required");
+      hasErrors = true;
+    }
+    if (username.length < 3) {
+      setUserNameError("Username must be at least 3 characters long");
+      hasErrors = true;
+    }
 
     if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
       setEmailError("Please enter a valid email address");
       hasErrors = true;
     }
 
-    if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters long");
+    if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters long");
       hasErrors = true;
     }
 
@@ -69,7 +81,7 @@ function SignUp() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ firstname, lastname, email, password }),
+      body: JSON.stringify({ firstname, lastname, username, email, password }),
     });
 
     // Handle response from server, maybe some errors was missed
@@ -80,6 +92,9 @@ function SignUp() {
       }
       if (responseData.lastNameError) {
         setLastNameError(responseData.lastNameError);
+      }
+      if (responseData.userNameError) {
+        setEmailError(responseData.userNameError);
       }
       if (responseData.emailError) {
         setEmailError(responseData.emailError);
@@ -97,10 +112,10 @@ function SignUp() {
 
   // Create the design of the page
   return (
-    <Container maxWidth="xs">
+    <Container maxWidth="sm">
       <Box
         sx={{
-          marginTop: 8,
+          marginTop: 2,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -139,7 +154,19 @@ function SignUp() {
                 autoComplete="family-name"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
+              <TextField
+                error={!!userNameError} // If its not empty string, set error to true
+                helperText={userNameError}
+                required
+                fullWidth
+                id="userName"
+                label="Username"
+                name="userName"
+                autoComplete="usern"
+              />
+            </Grid>
+            <Grid item xs={6}>
               <TextField
                 error={!!emailError} // If its not empty string, set error to true
                 helperText={emailError}
