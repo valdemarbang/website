@@ -8,11 +8,12 @@ interface locationsData {
   sensorAmount: number;
 }
 
-interface MapBounds {
-  mapBounds: { ne: [number, number]; sw: [number, number] };
-}
+type MapBounds = {
+  ne: [number, number];
+  sw: [number, number];
+};
 
-function SensorLocations(MapBoundsProp: MapBounds) {
+function SensorLocations({ mapBounds }: { mapBounds: MapBounds }) {
   /**
    * Fetch sensor locations data from the server when the component is mounted
    */
@@ -23,7 +24,10 @@ function SensorLocations(MapBoundsProp: MapBounds) {
   );
 
   useEffect(() => {
-    fetch(`http://localhost:8080/sensorlocations/${MapBoundsProp}`)
+    const mapBoundsString = `ne=${mapBounds.ne.join(
+      ","
+    )}&sw=${mapBounds.sw.join(",")}`;
+    fetch(`http://localhost:8080/sensorlocations/${mapBoundsString}`)
       .then((response) => response.json())
       .then((data: { locations: locationsData[] }) => {
         setSensorLocations(data.locations);
