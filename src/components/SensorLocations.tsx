@@ -33,7 +33,7 @@ function SensorLocations({ mapBounds }: { mapBounds: MapBounds }) {
         setSensorLocations(data.locations);
       })
       .catch((error) => console.error("Error:", error));
-  }, []);
+  }, [mapBounds.ne, mapBounds.sw]);
 
   return (
     <Box sx={{ backgroundColor: "white", opacity: 0.8, maxWidth: "200px" }}>

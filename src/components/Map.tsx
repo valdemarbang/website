@@ -64,7 +64,7 @@ function MapComponent() {
         minZoom={2}
         onClick={() => setSelectedMarkerData(null)} // remove maker overlay when map is clicked
         limitBounds="edge"
-        onBoundsChanged={({ center, zoom, bounds }) => {
+        onBoundsChanged={({ bounds }) => {
           setBounds({
             ne: [bounds.ne[0], bounds.ne[1]],
             sw: [bounds.sw[0], bounds.sw[1]],
