@@ -80,7 +80,7 @@ function MapComponent() {
             />
           </Overlay>
         )}
-      </Map>s
+      </Map>
   );
 }
 
