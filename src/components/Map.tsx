@@ -53,7 +53,6 @@ function MapComponent() {
   }, []); // Empty dependency array means this effect runs once on mount
 
   return (
-    <Box height="100%" width="100%">
       <Map
         defaultCenter={linkoping}
         defaultZoom={3}
@@ -83,7 +82,37 @@ function MapComponent() {
           </Overlay>
         )}
       </Map>
-    </Box>
+    <Map
+      defaultCenter={linkoping}
+      defaultZoom={3}
+      minZoom={2}
+      onClick={() => setSelectedMarkerData(null)}
+      limitBounds="edge"
+    >
+      <Cluster>
+        {mapMarkersData.map((marker: [number, number, number]) => (
+          <Marker
+          onClick={() => handleMarkerClick(marker[0], [marker[1], marker[2]])}
+            key={marker[0]} // Unique id for each marker
+            anchor={[marker[1], marker[2]]} // Latitude and longitude
+            color="#1F3559"
+          ></Marker>
+        ))}
+      </Cluster>
+      <ZoomControl />
+      {selectedMarkerData && (
+        <Overlay
+          anchor={selectedMarkerCoordinates}
+          offset={[50, 50]}
+          style={{ zIndex: 1 }} // Render overlay on top of markers/clusters
+        >
+          <MarkerOverlay // Create MarkerOverlay component
+            markerData={selectedMarkerData} // Unique id for selected marker
+            closeOverlay={() => setSelectedMarkerData(null)} // Set selected marker to null when overlay is closed
+          />
+        </Overlay>
+      )}
+    </Map>
   );
 }
 
