@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 interface DownloadProps {
   markerID: number;
   sensorName: string;
-  sxDesign: string;
+  sxDesign: React.CSSProperties;
 }
 
 /**

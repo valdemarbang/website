@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 interface BookmarkProps {
   markerID: number;
   userID: number;
-  sxDesign: string;
+  sxDesign: React.CSSProperties;
 }
 
 function Bookmark({ markerID, userID, sxDesign }: BookmarkProps) {

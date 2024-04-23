@@ -65,7 +65,10 @@ function MapComponent() {
         onClick={() => setSelectedMarkerData(null)} // remove maker overlay when map is clicked
         limitBounds="edge"
         onBoundsChanged={({ center, zoom, bounds }) => {
-          setBounds(bounds);
+          setBounds({
+            ne: [bounds.ne[0], bounds.ne[1]],
+            sw: [bounds.sw[0], bounds.sw[1]],
+          });
         }}
       >
         <Cluster>
@@ -98,7 +101,12 @@ function MapComponent() {
         right={0}
         sx={{ width: "auto", height: "auto" }}
       >
-        <SensorLocations mapBounds=bounds/>
+        <SensorLocations
+          mapBounds={{
+            ne: [bounds.ne[0], bounds.ne[1]],
+            sw: [bounds.sw[0], bounds.sw[1]],
+          }}
+        />
       </Box>
     </Box>
   );
