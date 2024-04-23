@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Map, ZoomControl, Marker, Overlay } from "pigeon-maps";
 import { Cluster } from "pigeon-maps-cluster";
 import MarkerOverlay from "./MarkerOverlay.tsx";
-import Box from '@mui/material/Box';
 
 /**
  * MapComponent displays the map with markers and overlay
@@ -53,7 +52,6 @@ function MapComponent() {
   }, []); // Empty dependency array means this effect runs once on mount
 
   return (
-    <Box height="100%" width="100%">
       <Map
         defaultCenter={linkoping}
         defaultZoom={3}
@@ -82,8 +80,7 @@ function MapComponent() {
             />
           </Overlay>
         )}
-      </Map>
-    </Box>
+      </Map>s
   );
 }
 
