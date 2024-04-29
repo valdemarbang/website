@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
  */
 interface shareProps {
   markerID: number;
-  sxDesign: string;
+  sxDesign: React.CSSProperties;
 }
 
 /**
