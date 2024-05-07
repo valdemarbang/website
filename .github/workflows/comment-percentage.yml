@@ -1,5 +1,5 @@
 name: "c2c"
-on: [push, pull_request]
+on: [pull_request_target]
 
 # Only allow reading the source code.
 permissions:
