@@ -1,0 +1,37 @@
+name: "c2c"
+on: [pull_request_target]
+
+# Only allow reading the source code.
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+        
+      - name: install cloc
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - run: sudo npm install cloc -g
+        
+      - name: comment to code ratio
+        uses: deep5050/comment-to-code-ratio-action@main
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          issue_number: 1
+          options: '--quiet ./ --hide-rate --git --unix --md --out=report.md --timeout=20 --by-percent=cmb --by-file --exclude-dir=node_modules --exclude-lang=JSON,XML'
