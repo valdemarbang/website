@@ -1,13 +1,27 @@
 name: "c2c"
-on: [push]
+on: [push, pull_request]
+
+# Only allow reading the source code.
+permissions:
+  contents: read
 
 jobs:
-  test:
-    name: setup environment
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
         
       - name: install cloc
         uses: actions/setup-node@v1
