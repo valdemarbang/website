@@ -33,5 +33,5 @@ jobs:
         uses: deep5050/comment-to-code-ratio-action@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          issue_number: 1
+          issue_number: 29
           options: '--quiet ./ --hide-rate --git --unix --md --out=report.md --timeout=20 --by-percent=cmb --by-file --exclude-dir=node_modules --exclude-lang=JSON,XML'
