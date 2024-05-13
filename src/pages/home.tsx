@@ -23,10 +23,12 @@ function HomePage() {
   return (
     <>
       {successMsg && <SuccessAlert open={true} message={successMsg} />}
-      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh"}}>
         <RootPage />
-        <Map />
-        <SideBar />
+        <Box sx={{ display: "flex", flexDirection: "row", flexGrow: 1}}>
+          <SideBar />
+          <Map />
+        </Box>
       </Box>
     </>
   );

@@ -43,7 +43,7 @@ function ResponsiveAppBar() {
 
   return (
     // Main AppBar component
-    <Box sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+    <Box sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, width: "auto", height: "auto"}}>
     <AppBar position="static" sx={{ backgroundColor: "#1F3559" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
